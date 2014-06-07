@@ -1,15 +1,7 @@
 'use strict';
 
-/**
- * @ngdoc overview
- * @name appApp
- * @description
- * # appApp
- *
- * Main module of the application.
- */
 angular
-  .module('appApp', [
+  .module('footieApp', [
     'ngAnimate',
     'ngCookies',
     'ngResource',
@@ -17,7 +9,8 @@ angular
     'ngSanitize',
     'ngTouch'
   ])
-  .config(function ($routeProvider) {
+  .config(function($routeProvider, $locationProvider) {
+    $locationProvider.html5Mode(true);
     $routeProvider
       .when('/', {
         templateUrl: 'views/main.html',
@@ -26,6 +19,14 @@ angular
       .when('/about', {
         templateUrl: 'views/about.html',
         controller: 'AboutCtrl'
+      })
+      .when('/shrink/', {
+        templateUrl: 'views/images.html',
+        controller: 'ImageCtrl'
+      })
+      .when('/squish/', {
+        templateUrl: 'views/images.html',
+        controller: 'ImageCtrl'
       })
       .otherwise({
         redirectTo: '/'
