@@ -2,9 +2,20 @@
 
 angular.module('footieApp')
 .controller('ImageCtrl', function($scope, ThumborService) {
-  ThumborService.shrink()
-  .then(function(result) {
-    console.log(result);
-    $scope.shrunkImage = result.data;
-  });
+  $scope.shrink = function() {
+    ThumborService.shrink($scope.image)
+      .then(function(result) {
+        console.log(result);
+        $scope.shrunkImage = result.data;
+      }
+    );
+  };
+  $scope.squish = function() {
+    ThumborService.squish($scope.image)
+      .then(function(result) {
+        console.log(result);
+        $scope.shrunkImage = result.data;
+      }
+    );
+  };
 });
