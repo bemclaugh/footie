@@ -1,6 +1,6 @@
 // Karma configuration
 // http://karma-runner.github.io/0.12/config/configuration-file.html
-// Generated on 2014-06-07 using
+// Generated on 2014-06-08 using
 // generator-karma 0.8.2
 
 module.exports = function(config) {
@@ -17,15 +17,18 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       'app/bower_components/angular/angular.js',
-      'app/bower_components/angular-mocks/angular-mocks.js',
-      'app/bower_components/angular-animate/angular-animate.js',
-      'app/bower_components/angular-cookies/angular-cookies.js',
       'app/bower_components/angular-resource/angular-resource.js',
-      'app/bower_components/angular-route/angular-route.js',
+      'app/bower_components/angular-cookies/angular-cookies.js',
       'app/bower_components/angular-sanitize/angular-sanitize.js',
+      'app/bower_components/angular-animate/angular-animate.js',
       'app/bower_components/angular-touch/angular-touch.js',
-      'app/scripts/**/*.js',
-      'test/mock/**/*.js',
+      'app/bower_components/angular-route/angular-route.js',
+      'app/bower_components/angular-mocks/angular-mocks.js',
+      'app/scripts/app.js',
+      'app/scripts/controllers/*.js',
+      'app/scripts/services/*.js',
+      'app/scripts/directives/*.js',
+      'app/views/*.html',
       'test/spec/**/*.js'
     ],
 
@@ -44,13 +47,15 @@ module.exports = function(config) {
     // - PhantomJS
     // - IE (only Windows)
     browsers: [
-      'PhantomJS'
+      'Chrome'
     ],
 
     // Which plugins to enable
     plugins: [
-      'karma-phantomjs-launcher',
-      'karma-jasmine'
+      //'karma-phantomjs-launcher',
+      'karma-chrome-launcher',
+      'karma-jasmine',
+      'karma-ng-html2js-preprocessor'
     ],
 
     // Continuous Integration mode
@@ -69,5 +74,12 @@ module.exports = function(config) {
     // },
     // URL root prevent conflicts with the site root
     // urlRoot: '_karma_'
+    preprocessors: {
+      '**/*.coffee': 'coffee',
+      'app/views/*.html': 'ng-html2js'
+    },
+    ngHtml2JsPreprocessor: {
+      stripPrefix: 'app/',
+    },
   });
 };
