@@ -7,9 +7,6 @@ describe('Directive: uploader', function () {
   // load the directive's module
   beforeEach(function() {
     module('footieApp');
-  });
-
-  beforeEach(function() {
     module('views/uploader.html');
   });
 
@@ -18,11 +15,16 @@ describe('Directive: uploader', function () {
       $scope = $injector.get('$rootScope');
       $compile = $injector.get('$compile');
       $compile(htmlView)($scope);
-      $scope.$digest();
   }));
 
   it('the element should have expanded', function() {
-    dump(htmlView);
+    $scope.$digest();
     expect(htmlView.html()).toMatch('Browse');
+  });
+
+  it('singleFile mode should display a text input element', function() {
+    $scope.mode = 'singleFile';
+    $scope.$digest();
+    expect(htmlView.find('input')).length(1);
   });
 });
