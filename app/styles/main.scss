@@ -3,6 +3,14 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/vendor/assets/font
 @import "../bower_components/bootstrap-sass-official/vendor/assets/stylesheets/bootstrap.scss";
 // endbower
 
+$orange: #f15a22;
+$tan: #f2e8dc;
+$almost_black: #363636;
+
+$action_color: $orange;
+$background_color: $tan;
+$text_color: $almost_black;
+
 .browsehappy {
   margin: 0.2em 0;
   background: #ccc;
@@ -14,6 +22,12 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/vendor/assets/font
 body {
   padding-top: 20px;
   padding-bottom: 20px;
+  background: $background_color;
+  color: $text_color;
+
+  a {
+    color: $action_color;
+  }
 }
 
 /* Everything but the jumbotron gets side spacing for mobile first views */
@@ -26,7 +40,7 @@ body {
 
 /* Custom page header */
 .header {
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: 1px solid darken($background_color, 20%);
 
   /* Make the masthead heading the same height as the navigation */
   h3 {
@@ -40,8 +54,8 @@ body {
 /* Custom page footer */
 .footer {
   padding-top: 19px;
-  color: #777;
-  border-top: 1px solid #e5e5e5;
+  color: $text_color;
+  border-top: 1px solid darken($background_color, 20%);
 }
 
 .container-narrow > hr {
@@ -51,7 +65,7 @@ body {
 /* Main marketing message and sign up button */
 .jumbotron {
   text-align: center;
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: 1px solid darken($background_color, 20%);
 
   .btn {
     font-size: 21px;
@@ -110,4 +124,19 @@ body {
     cursor: inherit;
     display: block;
 }
+.btn-default {
+  color: $action_color;
+  border-color: darken($action_color, 7%);
+  background-color: darken($background_color, 3%);
+}
+.btn-default:hover, .btn-default:focus, .btn-default:active, .btn-default.active, .open > .btn-default.dropdown-toggle {
+  color: $action_color;
+  border-color: darken($action_color, 7%);
+  background-color: darken($background_color, 7%);
+}
 
+.nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus {
+color: $action_color;
+border: $action_color solid 1px;
+background-color: transparent;
+}

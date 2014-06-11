@@ -7,7 +7,8 @@ angular
     'ngResource',
     'ngRoute',
     'ngSanitize',
-    'ngTouch'
+    'ngTouch',
+    'angularFileUpload'
   ])
   .config(function($routeProvider, $locationProvider) {
     $locationProvider.html5Mode(true);
