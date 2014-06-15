@@ -10,7 +10,7 @@ angular
     'ngTouch',
     'angularFileUpload'
   ])
-  .config(function($routeProvider, $locationProvider) {
+  .config(['$routeProvider', '$locationProvider', '$httpProvider', function($routeProvider, $locationProvider, $httpProvider) {
     $locationProvider.html5Mode(true);
     $routeProvider
       .when('/', {
@@ -32,4 +32,8 @@ angular
       .otherwise({
         redirectTo: '/'
       });
-  });
+
+    // send requests with appropriate CORS headers for the whole app
+    $httpProvider.defaults.useXDomain = true;
+    delete $httpProvider.defaults.headers.common['X-Requested-With'];
+  }]);
