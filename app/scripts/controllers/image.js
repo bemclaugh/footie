@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('footieApp')
-.controller('ImageCtrl', function($scope, ThumborService) {
+.controller('ImageCtrl', ['ThumborService', function($scope, ThumborService) {
   $scope.shrink = function() {
     ThumborService.shrink($scope.image)
       .then(function(result) {
@@ -18,4 +18,4 @@ angular.module('footieApp')
       }
     );
   };
-});
+}]);
