@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, make_response
+from flask import Flask, request, make_response, jsonify
 from flask_cors import cross_origin
 from werkzeug.utils import secure_filename
 from flask_storage.local import LocalStorage
@@ -16,13 +16,11 @@ app.config.upload = {
 @app.route('/upload/', methods=['POST'])
 @cross_origin(headers=['Content-Type']) # Send Access-Control-Allow-Headers
 def upload():
-    image = request.files.get('file')
-    if image:
+    for image in request.files.getlist('file'):
         storage = LocalStorage('local', None, app.config.upload)
-        response = make_response(storage.save(image, secure_filename(image.filename)))
-        response.headers['X-Footie-Version'] = '0.10'
-        response.headers['X-Footie-Filename'] = os.path.join(app.config.upload.get('STORAGE_LOCAL_ROOT'), secure_filename(image.filename))
-        return response
+        image_path = storage.save(image, secure_filename(image.filename))
+        if image_path:
+            return jsonify(filename=image_path)
 
 
 if __name__ == '__main__':
