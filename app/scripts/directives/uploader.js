@@ -7,111 +7,37 @@
  * # uploader
  */
 angular.module('footieApp')
-.directive('uploader', function () {
+.directive('uploader', ['$http', '$timeout', '$upload', function () {
     var controller = function($scope, $http, $timeout, $upload) {
-        $scope.fileReaderSupported = window.FileReader !== null;
-        $scope.uploadRightAway = true;
-        $scope.onFileSelect = function($files) {
-            $scope.selectedFiles = [];
-            $scope.progress = [];
-            if ($scope.upload && $scope.upload.length > 0) {
-                for (var i = 0; i < $scope.upload.length; i++) {
-                    if ($scope.upload[i] !== null) {
-                        $scope.upload[i].abort();
-                    }
-                }
-            }
-            $scope.upload = [];
-            $scope.uploadResult = [];
-            $scope.selectedFiles = $files;
-            $scope.dataUrls = [];
-            for (var i = 0; i < $files.length; i++) {
-                var $file = $files[i];
-                if (window.FileReader && $file.type.indexOf('image') > -1) {
-                    var fileReader = new FileReader();
-                    fileReader.readAsDataURL($files[i]);
-                    var loadFile = function(fileReader, index) {
-                        fileReader.onload = function(e) {
-                            $timeout(function() {
-                                $scope.dataUrls[index] = e.target.result;
-                            });
-                        }
-                    }(fileReader, i);
-                }
-                $scope.progress[i] = -1;
-                if ($scope.uploadRightAway) {
-                    $scope.start(i);
-                }
-            }
+        var progress = function(evt) {
+            console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
         };
-        $scope.hasUploader = function(index) {
-            return $scope.upload[index] !== null;
+        var success = function(data, status, headers, config) {
+            $scope = data.filename;
         };
-        $scope.abort = function(index) {
-            $scope.upload[index].abort();
-            $scope.upload[index] = null;
-        };
-        $scope.start = function(index) {
-            $scope.progress[index] = 0;
-            $scope.errorMsg = null;
-            if ($scope.howToSend === 1) {
-                $scope.upload[index] = $upload.upload({
-                    url : 'upload',
-                    method: $scope.httpMethod,
-                    headers: {'my-header': 'my-header-value'},
-                    data : {
-                        myModel : $scope.myModel
-                    },
-                    /* formDataAppender: function(fd, key, val) {
-                        if (angular.isArray(val)) {
-                            angular.forEach(val, function(v) {
-                              fd.append(key, v);
-                            });
-                          } else {
-                            fd.append(key, val);
-                          }
-                    }, */
-                    /* transformRequest: [function(val, h) {
-                        console.log(val, h('my-header')); return val + 'aaaaa';
-                    }], */
-                    file: $scope.selectedFiles[index],
-                    fileFormDataName: 'myFile'
-                }).then(function(response) {
-                    $scope.uploadResult.push(response.data);
-                }, function(response) {
-                    if (response.status > 0) {$scope.errorMsg = response.status + ': ' + response.data;}
-                }, function(evt) {
-                    // Math.min is to fix IE which reports 200% sometimes
-                    $scope.progress[index] = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-                }).xhr(function(xhr){
-                    xhr.upload.addEventListener('abort', function() {console.log('abort complete');}, false);
+        var readFile = function(file) {
+            var fileReader = new FileReader();
+            fileReader.onload = function() {
+                this.upload = $upload.upload({
+                    url: 'http://127.0.0.1:5000/upload/',
+                    method: 'POST',
+                    headers: {'Content-Type': file.type},
+                    data: {myObj: $scope.myModelObj},
+                    file: file}
+                ).progress(function(evt) {progress(evt);}
+                ).success(function(data, status, headers, config) {
+                    success(data, status, headers, config);
                 });
-            } else {
-                var fileReader = new FileReader();
-                fileReader.onload = function(e) {
-                    $scope.upload[index] = $upload.http({
-                        url: 'upload',
-                        headers: {'Content-Type': $scope.selectedFiles[index].type},
-                        data: e.target.result
-                    }).then(function(response) {
-                        $scope.uploadResult.push(response.data);
-                    }, function(response) {
-                        if (response.status > 0) {$scope.errorMsg = response.status + ': ' + response.data;}
-                    }, function(evt) {
-                        // Math.min is to fix IE which reports 200% sometimes
-                        $scope.progress[index] = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-                    });
-                };
-                fileReader.readAsArrayBuffer($scope.selectedFiles[index]);
-            }
+            };
+            fileReader.readAsDataURL(file);
         };
-        $scope.resetInputFile = function() {
-            var elems = document.getElementsByTagName('input');
-            for (var i = 0; i < elems.length; i++) {
-                if (elems[i].type === 'file') {
-                    elems[i].value = null;
+        $scope.fileReaderSupported = window.FileReader !== null;
+        $scope.onFileSelect = function($files) {
+            $files.forEach(function(file) {
+                if (window.FileReader && file.type.indexOf('image') > -1) {
+                    readFile(file);
                 }
-            }
+            });
         };
     };
     return {
@@ -120,4 +46,4 @@ angular.module('footieApp')
         scope: { file: '=' },
         controller: controller
     };
-});
+}]);
