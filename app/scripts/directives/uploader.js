@@ -6,16 +6,17 @@
  * @description
  * # uploader
  */
-angular.module('footieApp')
-.directive('uploader', ['$http', '$timeout', '$upload', function () {
-    var controller = function($scope, $http, $timeout, $upload) {
+angular.module('footieApp', [])
+.directive('uploader', function () {
+    var controller = function($scope) {
         var progress = function(evt) {
             console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
         };
         var success = function(data, status, headers, config) {
-            $scope = data.filename;
+            $scope.filename = data.filename;
         };
         var readFile = function(file) {
+            //$scope.fileName = file;
             var fileReader = new FileReader();
             fileReader.onload = function() {
                 this.upload = $upload.upload({
@@ -43,7 +44,7 @@ angular.module('footieApp')
     return {
         templateUrl: 'views/uploader.html',
         restrict: 'E',
-        scope: { file: '=' },
+        scope: { fileName: '=' },
         controller: controller
     };
-}]);
+}   );
