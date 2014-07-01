@@ -12,7 +12,7 @@ angular.module('footieApp', [])
         var progress = function(evt) {
             console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
         };
-        var success = function(data, status, headers, config) {
+        var success = function(data) {
             $scope.filename = data.filename;
         };
         var readFile = function(file) {
