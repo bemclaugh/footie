@@ -1,3 +1,12 @@
 <section id="uploader">
-<span class="btn btn-default btn-file">Browse<input type="file" ng-file-select="onFileSelect($files)" ng-click="resetInputFile()"></span>
+  <div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+          <input type="file" class="form-control" ng-file-select="onFileSelect($files)" ng-click="resetInputFile()">
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="button">Browse</button>
+          </span>
+        </div>
+    </div>
+  </div>
 </section>
